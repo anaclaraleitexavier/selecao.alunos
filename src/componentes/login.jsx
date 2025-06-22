@@ -112,11 +112,56 @@ const RegisterLink = styled.p`
   }
 `;
 
+const Mensagem = styled.p`
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+`;
+
+
 
 function Login() {
+  const [form, setForm] = useState({
+    email: '',
+    senha: '',
+  });
+
+  const [mensagem, setMensagem] = useState('');
+
+  const handleChange = (e) => {
+    // Aqui, como o placeholder é "Login", vamos mapear para "email"
+    const name = e.target.placeholder.toLowerCase() === 'login' ? 'email' : 'senha';
+    setForm({ ...form, [name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const resp = await fetch('https://selecao1.vercel.app/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await resp.json();
+
+      if (resp.ok) {
+        setMensagem('✅ Login realizado com sucesso!');
+        console.log('Usuário logado:', data);
+        // Aqui você pode salvar token, redirecionar, etc.
+      } else {
+        setMensagem(`❌ ${data.error || 'Falha no login.'}`);
+      }
+    } catch (err) {
+      console.error('Erro no login:', err);
+      setMensagem('❌ Erro de conexão com o servidor.');
+    }
+  };
+
   return (
     <PageWrapper>
-      <Card>
+      <Card as="form" onSubmit={handleSubmit}>
         <LeftPanel>
           <Message>
             <p><strong>Bem-vindo de volta!</strong></p>
@@ -125,9 +170,10 @@ function Login() {
         </LeftPanel>
         <RightPanel>
           <Title>Fazer Login</Title>
-          <Input type="text" placeholder="Login" />
-          <Input type="password" placeholder="Senha" />
+          <Input type="text" placeholder="Login" value={form.email} onChange={handleChange} />
+          <Input type="password" placeholder="Senha" value={form.senha} onChange={handleChange} />
           <Button type="submit">Entrar</Button>
+          {mensagem && <Mensagem>{mensagem}</Mensagem>}
           <RegisterLink>
             Não tem cadastro ainda? <a href="/cadastro">Cadastre-se</a>
           </RegisterLink>
@@ -138,4 +184,3 @@ function Login() {
 }
 
 export default Login;
-
