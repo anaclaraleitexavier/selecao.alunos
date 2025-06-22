@@ -1,5 +1,6 @@
-import styled from 'styled-components';
-import React, { useState } from 'react';
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -98,46 +99,43 @@ const Button = styled.button`
 `;
 
 function Cadastro() {
-  const [form, setForm] = useState({
-    nome: '',
-    sobrenome: '',
-    email: '',
-    senha: ''
-  });
-
-  const [mensagem, setMensagem] = useState('');
+  const [form, setForm] = useState({ nome: '', sobrenome: '', email: '', senha: '' })
+  const [mensagem, setMensagem] = useState('')
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const { placeholder, value } = e.target
+    let key = placeholder.toLowerCase()
+    // Ajustes caso placeholder não bata com o nome da propriedade
+    if (key === 'criar senha') key = 'senha'
+    setForm({ ...form, [key]: value })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault()
     try {
       const resp = await fetch('https://selecao1.vercel.app/alunos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
+        body: JSON.stringify(form),
+      })
 
-      const data = await resp.json();
+      const data = await resp.json()
 
       if (resp.ok) {
-        setMensagem('✅ Cadastro realizado com sucesso!');
-        setForm({ nome: '', sobrenome: '', email: '', senha: '' });
+        setMensagem('✅ Cadastro realizado com sucesso! Redirecionando para login...')
+        setTimeout(() => navigate('/login'), 1500)
       } else {
-        setMensagem(`❌ ${data.error || 'Erro no cadastro.'}`);
+        setMensagem(`❌ ${data.error || 'Erro no cadastro.'}`)
       }
     } catch (err) {
-      console.error('Erro ao cadastrar:', err);
-      setMensagem('❌ Erro de conexão com o servidor.');
+      setMensagem('❌ Erro de conexão com o servidor.')
     }
-  };
+  }
 
   return (
     <PageWrapper>
-      <Card onSubmit={handleSubmit} as="form">
+      <Card as="form" onSubmit={handleSubmit}>
         <LeftPanel>
           <Message>
             <p><strong>Bem-vindo!</strong></p>
@@ -146,23 +144,25 @@ function Cadastro() {
         </LeftPanel>
         <RightPanel>
           <Title>Cadastro</Title>
-          <Input name="nome" type="text" placeholder="Nome" value={form.nome} onChange={handleChange} />
-          <Input name="sobrenome" type="text" placeholder="Sobrenome" value={form.sobrenome} onChange={handleChange} />
-          <Input name="email" type="text" placeholder="Email" value={form.email} onChange={handleChange} />
-          <Input name="senha" type="password" placeholder="Senha" value={form.senha} onChange={handleChange} />
+          <Input type="text" placeholder="Nome" value={form.nome} onChange={handleChange} />
+          <Input type="text" placeholder="Sobrenome" value={form.sobrenome} onChange={handleChange} />
+          <Input type="text" placeholder="Email" value={form.email} onChange={handleChange} />
+          <Input type="password" placeholder="Criar senha" value={form.senha} onChange={handleChange} />
           <Button type="submit">Cadastrar</Button>
           {mensagem && <Mensagem>{mensagem}</Mensagem>}
+          <RegisterLink>
+            Já tem cadastro? <Link to="/login">Faça login</Link>
+          </RegisterLink>
         </RightPanel>
       </Card>
     </PageWrapper>
-  );
+  )
 }
 
-export default Cadastro;
+export default Cadastro
 
-// Styled component para a mensagem
 const Mensagem = styled.p`
   margin-top: 10px;
-  color: #000;
+  color: #fff;
   font-weight: bold;
-`;
+`
