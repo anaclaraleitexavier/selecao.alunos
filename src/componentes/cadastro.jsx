@@ -13,17 +13,20 @@ const PageWrapper = styled.div`
 `;
 
 const RegisterLink = styled.p`
+  text-align: center;
   margin-top: 15px;
-  color: #fff;
-  font-size: 14px;
+  font-size: 0.8rem; /* Tamanho de fonte reduzido */
+
   a {
-    color: #0af;
+    color: #006400;
     text-decoration: none;
+    font-weight: bold;
+
     &:hover {
       text-decoration: underline;
     }
   }
-`
+`;
 
 const Card = styled.div`
   display: flex;
@@ -164,7 +167,7 @@ function Cadastro() {
           <Button type="submit">Cadastrar</Button>
           {mensagem && <Mensagem>{mensagem}</Mensagem>}
           <RegisterLink>
-            Já tem cadastro? <Link to="/login">Faça login</Link>
+            Já tem cadastro? <Link to="/login">Voltar para o login</Link>
           </RegisterLink>
         </RightPanel>
       </Card>
