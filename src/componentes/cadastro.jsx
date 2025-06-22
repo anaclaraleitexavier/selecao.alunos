@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 
 const PageWrapper = styled.div`
   display: flex;
