@@ -12,6 +12,19 @@ const PageWrapper = styled.div`
   font-family: 'Segoe UI', sans-serif;
 `;
 
+const RegisterLink = styled.p`
+  margin-top: 15px;
+  color: #fff;
+  font-size: 14px;
+  a {
+    color: #0af;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
 const Card = styled.div`
   display: flex;
   flex-direction: row;
