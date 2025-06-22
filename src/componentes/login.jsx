@@ -121,45 +121,39 @@ const Mensagem = styled.p`
 `;
 
 
-
 function Login() {
-  const [form, setForm] = useState({
-    email: '',
-    senha: '',
-  });
-
-  const [mensagem, setMensagem] = useState('');
+  const [form, setForm] = useState({ email: '', senha: '' })
+  const [mensagem, setMensagem] = useState('')
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    // Aqui, como o placeholder é "Login", vamos mapear para "email"
-    const name = e.target.placeholder.toLowerCase() === 'login' ? 'email' : 'senha';
-    setForm({ ...form, [name]: e.target.value });
-  };
+    const name = e.target.placeholder.toLowerCase() === 'login' ? 'email' : 'senha'
+    setForm({ ...form, [name]: e.target.value })
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const resp = await fetch('https://selecao1.vercel.app/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      });
+      })
 
-      const data = await resp.json();
+      const data = await resp.json()
 
       if (resp.ok) {
-        setMensagem('✅ Login realizado com sucesso!');
-        console.log('Usuário logado:', data);
-        // Aqui você pode salvar token, redirecionar, etc.
+        setMensagem('✅ Login realizado com sucesso!')
+        // Redireciona para home após 1s (pode ajustar)
+        setTimeout(() => navigate('/home'), 1000)
       } else {
-        setMensagem(`❌ ${data.error || 'Falha no login.'}`);
+        setMensagem(`❌ ${data.error || 'Falha no login.'}`)
       }
     } catch (err) {
-      console.error('Erro no login:', err);
-      setMensagem('❌ Erro de conexão com o servidor.');
+      setMensagem('❌ Erro de conexão com o servidor.')
     }
-  };
+  }
 
   return (
     <PageWrapper>
@@ -182,7 +176,8 @@ function Login() {
         </RightPanel>
       </Card>
     </PageWrapper>
-  );
+  )
 }
+
 
 export default Login;
