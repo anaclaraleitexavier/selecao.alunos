@@ -104,16 +104,10 @@ function Cadastro() {
     senha: ''
   });
 
-const Mensagem = styled.p`
-  margin-top: 10px;
-  color: #fff;
-  font-weight: bold;
-`;
-
   const [mensagem, setMensagem] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.placeholder.toLowerCase().replace(' ', '')]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -151,10 +145,10 @@ const Mensagem = styled.p`
         </LeftPanel>
         <RightPanel>
           <Title>Cadastro</Title>
-          <Input type="text" placeholder="Nome" value={form.nome} onChange={handleChange} />
-          <Input type="text" placeholder="Sobrenome" value={form.sobrenome} onChange={handleChange} />
-          <Input type="text" placeholder="Email" value={form.email} onChange={handleChange} />
-          <Input type="password" placeholder="Senha" value={form.senha} onChange={handleChange} />
+          <Input name="nome" type="text" placeholder="Nome" value={form.nome} onChange={handleChange} />
+          <Input name="sobrenome" type="text" placeholder="Sobrenome" value={form.sobrenome} onChange={handleChange} />
+          <Input name="email" type="text" placeholder="Email" value={form.email} onChange={handleChange} />
+          <Input name="senha" type="password" placeholder="Senha" value={form.senha} onChange={handleChange} />
           <Button type="submit">Cadastrar</Button>
           {mensagem && <Mensagem>{mensagem}</Mensagem>}
         </RightPanel>
@@ -165,7 +159,9 @@ const Mensagem = styled.p`
 
 export default Cadastro;
 
-
-
-
-    
+// Styled component para a mensagem
+const Mensagem = styled.p`
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+`;
