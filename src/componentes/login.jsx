@@ -115,7 +115,7 @@ const RegisterLink = styled.p`
 
 const Mensagem = styled.p`
   margin-top: 10px;
-  color: #fff;
+  color: #000;
   font-weight: bold;
 `;
 
