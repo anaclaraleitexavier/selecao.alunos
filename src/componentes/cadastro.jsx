@@ -97,9 +97,52 @@ const Button = styled.button`
 `;
 
 function Cadastro() {
+  const [form, setForm] = useState({
+    nome: '',
+    sobrenome: '',
+    email: '',
+    senha: ''
+  });
+
+const Mensagem = styled.p`
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+`;
+
+  const [mensagem, setMensagem] = useState('');
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.placeholder.toLowerCase().replace(' ', '')]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const resp = await fetch('https://selecao1.vercel.app/alunos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+
+      const data = await resp.json();
+
+      if (resp.ok) {
+        setMensagem('✅ Cadastro realizado com sucesso!');
+        setForm({ nome: '', sobrenome: '', email: '', senha: '' });
+      } else {
+        setMensagem(`❌ ${data.error || 'Erro no cadastro.'}`);
+      }
+    } catch (err) {
+      console.error('Erro ao cadastrar:', err);
+      setMensagem('❌ Erro de conexão com o servidor.');
+    }
+  };
+
   return (
     <PageWrapper>
-      <Card>
+      <Card onSubmit={handleSubmit} as="form">
         <LeftPanel>
           <Message>
             <p><strong>Bem-vindo!</strong></p>
@@ -108,12 +151,12 @@ function Cadastro() {
         </LeftPanel>
         <RightPanel>
           <Title>Cadastro</Title>
-          <Input type="text" placeholder="Nome" />
-          <Input type="text" placeholder="Sobrenome" />
-      
-          <Input type="text" placeholder="Email" />
-          <Input type="password" placeholder="Criar senha" />
+          <Input type="text" placeholder="Nome" value={form.nome} onChange={handleChange} />
+          <Input type="text" placeholder="Sobrenome" value={form.sobrenome} onChange={handleChange} />
+          <Input type="text" placeholder="Email" value={form.email} onChange={handleChange} />
+          <Input type="password" placeholder="Senha" value={form.senha} onChange={handleChange} />
           <Button type="submit">Cadastrar</Button>
+          {mensagem && <Mensagem>{mensagem}</Mensagem>}
         </RightPanel>
       </Card>
     </PageWrapper>
