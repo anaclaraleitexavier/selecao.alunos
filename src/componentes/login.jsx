@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -176,7 +177,7 @@ function Login() {
           <Button type="submit">Entrar</Button>
           {mensagem && <Mensagem>{mensagem}</Mensagem>}
           <RegisterLink>
-            Não tem cadastro ainda? <a href="/cadastro">Cadastre-se</a>
+            Não tem cadastro ainda? <Link to="/cadastro">Cadastre-se</Link>
           </RegisterLink>
         </RightPanel>
       </Card>
